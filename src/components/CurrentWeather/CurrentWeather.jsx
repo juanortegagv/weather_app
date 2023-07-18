@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { Container, Row, Col, Spinner } from "react-bootstrap";
 import {
   getWeatherByLocation,
@@ -10,8 +10,9 @@ import getDayOfWeek from "../../adapters/getDayOfWeek";
 
 const CurrentWeather = () => {
   const [weather, setWeather] = useState(null);
-  const { isLoading, setIsLoading } = useContext(AppContext);
-  const fetchWeather = async () => {
+  const { setIsLoading, setError } = useContext(AppContext);
+
+  const fetchWeather = useCallback(async () => {
     setIsLoading(true);
     try {
       navigator.geolocation.getCurrentPosition(async (position) => {
@@ -25,14 +26,18 @@ const CurrentWeather = () => {
         setWeather({ current: currentWeather, forecast: threeDayForecast });
       });
     } catch (error) {
+      setError(
+        "Error al obtener los datos del clima. Por favor, vuelve a cargar la página."
+      );
       console.error(error);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [setIsLoading, setError]);
+
   useEffect(() => {
     fetchWeather();
-  }, []);
+  }, [fetchWeather]);
 
   return (
     <Container fluid className="pt-5" style={{ maxWidth: "600px" }}>
@@ -58,7 +63,7 @@ const CurrentWeather = () => {
               </Col>
               <Col xs={8}>
                 <p className="text-blue-rain h6">
-                  Humidity:{weather.current.main.humidity}
+                  Humidity: {weather.current.main.humidity}
                 </p>
               </Col>
             </Row>
@@ -72,13 +77,13 @@ const CurrentWeather = () => {
           </Col>
           <Col
             xs={12}
-            className="border-top border-3 border-white justify-content-center"
+            className="border-top border-3 border-white justify-content-center mt-3"
           >
             {weather.forecast && (
               <Row>
-                {weather.forecast.map((fweather) => {
+                {weather.forecast.map((fweather, index) => {
                   return (
-                    <Col xs={4}>
+                    <Col xs={4} key={index}>
                       <img
                         src={`http://openweathermap.org/img/wn/${fweather.weather[0].icon}@2x.png`}
                         alt={fweather.weather[0].description}
@@ -87,8 +92,12 @@ const CurrentWeather = () => {
                         {getDayOfWeek(fweather.dt_txt)}
                       </p>
                       <Row>
-                        <p className="h6 text-white w-50">{fweather.temp_max}°</p>
-                        <p className="h6 text-gray w-50">{fweather.temp_min}°</p>
+                        <p className="h6 text-white w-50">
+                          {fweather.temp_max}°
+                        </p>
+                        <p className="h6 text-gray w-50">
+                          {fweather.temp_min}°
+                        </p>
                       </Row>
                     </Col>
                   );
