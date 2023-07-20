@@ -1,78 +1,66 @@
-import React, { useState, useEffect, useContext, useCallback } from "react";
-import { Container, Row, Col, Spinner } from "react-bootstrap";
-import {
-  getWeatherByLocation,
-  getWeatherForecast,
-} from "../../api/weatherServices";
-import { AppContext } from "../../context/AppContext";
-import getThreeDayForecast from "../../adapters/getThreeDayForecastAdapter";
+import React, { useContext } from "react";
+import { Row, Col, Button } from "react-bootstrap";
 import getDayOfWeek from "../../adapters/getDayOfWeek";
+import { AppContext } from "../../context/AppContext";
+import capitalizeWords from "../../adapters/capitalizeWords";
+import CitySearch from "../CitySearch/CitySearch";
+import save from "../../assets/icons/guardar.svg";
+import saved from "../../assets/icons/guardado.svg";
 
-const CurrentWeather = () => {
-  const [weather, setWeather] = useState(null);
-  const { setIsLoading, setError } = useContext(AppContext);
+const CurrentWeather = ({ weather }) => {
+  const { selectedCity, toggleFavorite, favorites } = useContext(AppContext);
+  const cityToAdd = selectedCity
+    ? capitalizeWords(selectedCity)
+    : weather?.current?.name;
+  const isFavorite = favorites.includes(cityToAdd);
 
-  const fetchWeather = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      navigator.geolocation.getCurrentPosition(async (position) => {
-        const { latitude, longitude } = position.coords;
-        const [currentWeather, weatherForecast] = await Promise.all([
-          getWeatherByLocation(latitude, longitude),
-          getWeatherForecast(latitude, longitude),
-        ]);
-
-        const threeDayForecast = getThreeDayForecast(weatherForecast);
-        setWeather({ current: currentWeather, forecast: threeDayForecast });
-      });
-    } catch (error) {
-      setError(
-        "Error al obtener los datos del clima. Por favor, vuelve a cargar la página."
-      );
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [setIsLoading, setError]);
-
-  useEffect(() => {
-    fetchWeather();
-  }, [fetchWeather]);
+  const handleAddFavorite = () => {
+    toggleFavorite(cityToAdd);
+  };
 
   return (
-    <Container fluid className="pt-5" style={{ maxWidth: "600px" }}>
-      {weather ? (
-        <Row className="justify-content-center align-items-start">
+    <>
+      {weather && (
+        <Row className="justify-content-center align-items-start pt-5 mx-auto">
           <Col xs={8}>
             <h1 className="text-white">
-              {Math.round(weather.current.main.temp - 273.15)}°
+              {Math.round(weather.current.temp - 273.15)}°
             </h1>
-            <h2 className="text-turquoise">{weather.current.name}</h2>
+            <h2 className="text-turquoise d-flex">
+              {selectedCity
+                ? capitalizeWords(selectedCity)
+                : weather.current.name}
+              <CitySearch weather={weather} />
+            </h2>
             <h6 className="text-white">Hoy</h6>
             <Row>
               <Col xs={2}>
-                <p className="h6 text-white">
-                  {" "}
-                  {Math.round(weather.current.main.temp_max - 273.15)}°
-                </p>
+                <p className="h6 text-white"> {weather.current.temp_max}°</p>
               </Col>
               <Col xs={2}>
-                <p className="h6 text-gray">
-                  {Math.round(weather.current.main.temp_min - 273.15)}°
-                </p>
+                <p className="h6 text-gray">{weather.current.temp_min}°</p>
               </Col>
               <Col xs={8}>
                 <p className="text-blue-rain h6">
-                  Humidity: {weather.current.main.humidity}
+                  Humidity: {weather.current.humidity}
                 </p>
               </Col>
             </Row>
           </Col>
-          <Col xs={4} className="d-flex justify-content-center p-0">
+          <Col
+            xs={4}
+            className="d-flex justify-content-center p-0 position-relative"
+          >
             <img
               src={`http://openweathermap.org/img/wn/${weather.current.weather[0].icon}@2x.png`}
               alt={weather.current.weather[0].description}
               style={{ width: "125px" }}
+            />
+            <img
+              src={isFavorite ? saved : save}
+              alt="icon-save"
+              onClick={handleAddFavorite}
+              className="save-icon"
             />
           </Col>
           <Col
@@ -83,7 +71,11 @@ const CurrentWeather = () => {
               <Row>
                 {weather.forecast.map((fweather, index) => {
                   return (
-                    <Col xs={4} key={index}>
+                    <Col
+                      xs={4}
+                      key={index}
+                      className="p-0 align-items-center d-flex flex-column"
+                    >
                       <img
                         src={`http://openweathermap.org/img/wn/${fweather.weather[0].icon}@2x.png`}
                         alt={fweather.weather[0].description}
@@ -106,10 +98,8 @@ const CurrentWeather = () => {
             )}
           </Col>
         </Row>
-      ) : (
-        <Spinner animation="border" role="status" />
       )}
-    </Container>
+    </>
   );
 };
 

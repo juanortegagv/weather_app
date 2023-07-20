@@ -1,4 +1,4 @@
-export { default as CurrentWeather } from './CurrentWeather/CurrentWeather';
-export { default as SearchBar } from './SearchBar/SearchBar';
-// export { default as WeatherCard } from './WeatherCard/WeatherCard';
-export { default as WeatherInterface } from './WeatherInterface/WeatherInterface';
+export { default as CurrentWeather } from "./CurrentWeather/CurrentWeather";
+export { default as CitySearch } from "./CitySearch/CitySearch";
+export { default as WeatherInterface } from "./WeatherInterface/WeatherInterface";
+export { default as Favorites } from "./Favorites/Favorites";
