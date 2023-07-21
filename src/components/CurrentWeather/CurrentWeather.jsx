@@ -1,18 +1,18 @@
-import React, { useContext } from "react";
-import { Row, Col, Button } from "react-bootstrap";
-import getDayOfWeek from "../../adapters/getDayOfWeek";
-import { AppContext } from "../../context/AppContext";
-import capitalizeWords from "../../adapters/capitalizeWords";
-import CitySearch from "../CitySearch/CitySearch";
-import save from "../../assets/icons/guardar.svg";
-import saved from "../../assets/icons/guardado.svg";
+import React, { useContext } from 'react';
+import { Row, Col, Button } from 'react-bootstrap';
+import getDayOfWeek from '../../adapters/getDayOfWeek';
+import { AppContext } from '../../context/AppContext';
+import capitalizeWords from '../../adapters/capitalizeWords';
+import CitySearch from '../CitySearch/CitySearch';
+import save from '../../assets/icons/guardar.svg';
+import saved from '../../assets/icons/guardado.svg';
 
 const CurrentWeather = ({ weather }) => {
   const { selectedCity, toggleFavorite, favorites } = useContext(AppContext);
   const cityToAdd = selectedCity
     ? capitalizeWords(selectedCity)
     : weather?.current?.name;
-  const isFavorite = favorites.includes(cityToAdd);
+  const isFavorite = favorites.some((favCity) => favCity.name === cityToAdd);
 
   const handleAddFavorite = () => {
     toggleFavorite(cityToAdd);
@@ -54,7 +54,7 @@ const CurrentWeather = ({ weather }) => {
             <img
               src={`http://openweathermap.org/img/wn/${weather.current.weather[0].icon}@2x.png`}
               alt={weather.current.weather[0].description}
-              style={{ width: "125px" }}
+              style={{ width: '125px' }}
             />
             <img
               src={isFavorite ? saved : save}

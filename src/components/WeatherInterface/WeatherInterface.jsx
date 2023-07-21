@@ -1,8 +1,8 @@
-import React, { useContext, useEffect } from "react";
-import { Container, Row, Col, Spinner, Alert } from "react-bootstrap";
-import { CurrentWeather, CitySearch, Favorites } from "../index";
-import { AppContext } from "../../context/AppContext";
-import { fetchAndSetWeather } from "../../api/weatherData";
+import React, { useContext, useEffect } from 'react';
+import { Container, Row, Col, Spinner, Alert } from 'react-bootstrap';
+import { CurrentWeather, CitySearch, Favorites } from '../index';
+import { AppContext } from '../../context/AppContext';
+import { fetchAndSetWeather } from '../../api/weatherData';
 
 export const WeatherInterface = () => {
   const {
@@ -13,22 +13,25 @@ export const WeatherInterface = () => {
     weather,
     setWeather,
     selectedCity,
+    favorite,
   } = useContext(AppContext);
+  console.log('favorite: ', favorite);
 
   useEffect(() => {
     const initFetchWeather = async () => {
       if (selectedCity) {
+        console.log('selectedCity: ', selectedCity);
         await fetchAndSetWeather(
           null,
           null,
           setIsLoading,
           setError,
           setWeather,
-          selectedCity
+          selectedCity,
         );
       } else {
         const position = await new Promise((resolve, reject) =>
-          navigator.geolocation.getCurrentPosition(resolve, reject)
+          navigator.geolocation.getCurrentPosition(resolve, reject),
         );
         const lat = position.coords.latitude;
         const lon = position.coords.longitude;
@@ -43,19 +46,19 @@ export const WeatherInterface = () => {
     <Container
       fluid
       className="d-flex justify-content-center vh-100"
-      style={{ maxWidth: "600px" }}
+      style={{ maxWidth: '600px' }}
     >
       {isLoading ? (
         <Spinner
           animation="border"
           role="status"
           className="position-absolute text-primary"
-          style={{ top: "50%" }}
+          style={{ top: '50%' }}
         />
       ) : error ? (
         <Row
           className="w-50 justify-content-center align-items-center position-relative"
-          style={{ maxWidth: "350px" }}
+          style={{ maxWidth: '350px' }}
         >
           <Alert variant="danger" className="position-absolute">
             {error}
@@ -65,7 +68,7 @@ export const WeatherInterface = () => {
         <Row className="w-100">
           <Col xs={12}>
             <CurrentWeather weather={weather} />
-            <Row className="justify-content-center mt-4">
+            <Row className="justify-content-center mt-5">
               <Favorites />
             </Row>
           </Col>

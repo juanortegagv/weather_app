@@ -1,8 +1,8 @@
-import React, { useContext, useState } from "react";
-import { Form, Col, Dropdown } from "react-bootstrap";
-import { AppContext } from "../../context/AppContext";
-import { cities } from "../../constants/cities";
-import downArrow from "../../assets/icons/abajo-chevron.png";
+import React, { useContext, useState } from 'react';
+import { Form, Col, Dropdown } from 'react-bootstrap';
+import { AppContext } from '../../context/AppContext';
+import { cities } from '../../constants/cities';
+import downArrow from '../../assets/icons/abajo-chevron.png';
 
 const CitySearch = ({ weather }) => {
   const { setSelectedCity } = useContext(AppContext);
@@ -33,10 +33,7 @@ const CitySearch = ({ weather }) => {
               Busqueda por ciudad
             </Form.Label>
             {cities.map((city, index) => (
-              <Dropdown.Item
-                key={index}
-                onClick={() => handleCitySelect(city)}
-              >
+              <Dropdown.Item key={index} onClick={() => handleCitySelect(city)}>
                 {city.name}
               </Dropdown.Item>
             ))}

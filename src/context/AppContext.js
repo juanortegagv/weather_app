@@ -1,4 +1,6 @@
-import { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect } from 'react';
+import { fetchFavorite } from '../api/weatherData';
+import PropTypes from 'prop-types';
 
 export const AppContext = createContext();
 
@@ -8,21 +10,25 @@ export const AppProvider = ({ children }) => {
   const [selectedCity, setSelectedCity] = useState(null);
   const [weather, setWeather] = useState(null);
   const [favorites, setFavorites] = useState(
-    () => JSON.parse(localStorage.getItem("favorites")) || []
+    () => JSON.parse(localStorage.getItem('favorites')) || [],
   );
 
   const toggleFavorite = (city) => {
-    setFavorites((prevFavorites) => {
-      if (prevFavorites.includes(city)) {
-        return prevFavorites.filter((favoriteCity) => favoriteCity !== city);
-      } else {
-        return [...prevFavorites, city];
-      }
-    });
+    const foundCity = favorites.find(
+      (favoriteCity) => favoriteCity.name === city,
+    );
+
+    if (foundCity) {
+      setFavorites((prevFavorites) =>
+        prevFavorites.filter((favoriteCity) => favoriteCity.name !== city),
+      );
+    } else {
+      fetchFavorite(city, setIsLoading, setFavorites, setError, favorites);
+    }
   };
 
   useEffect(() => {
-    localStorage.setItem("favorites", JSON.stringify(favorites));
+    localStorage.setItem('favorites', JSON.stringify(favorites));
   }, [favorites]);
 
   return (
@@ -43,4 +49,8 @@ export const AppProvider = ({ children }) => {
       {children}
     </AppContext.Provider>
   );
+};
+
+AppProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
