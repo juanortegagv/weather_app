@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import getDayOfWeek from '../../adapters/getDayOfWeek';
 import { AppContext } from '../../context/AppContext';
 import capitalizeWords from '../../adapters/capitalizeWords';
 import CitySearch from '../CitySearch/CitySearch';
 import save from '../../assets/icons/guardar.svg';
 import saved from '../../assets/icons/guardado.svg';
+import PropTypes from 'prop-types';
 
 const CurrentWeather = ({ weather }) => {
   const { selectedCity, toggleFavorite, favorites } = useContext(AppContext);
@@ -103,4 +104,7 @@ const CurrentWeather = ({ weather }) => {
   );
 };
 
+CurrentWeather.propTypes = {
+  weather: PropTypes.object,
+};
 export default CurrentWeather;

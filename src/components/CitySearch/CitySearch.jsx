@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react';
-import { Form, Col, Dropdown } from 'react-bootstrap';
+import { Form, Dropdown } from 'react-bootstrap';
 import { AppContext } from '../../context/AppContext';
 import { cities } from '../../constants/cities';
-import downArrow from '../../assets/icons/abajo-chevron.png';
+import PropTypes from 'prop-types';
 
 const CitySearch = ({ weather }) => {
   const { setSelectedCity } = useContext(AppContext);
@@ -25,9 +25,7 @@ const CitySearch = ({ weather }) => {
             variant="secondary"
             id="citySearchDropdown"
             className="bg-transparent border-0"
-          >
-            {/* <img src={downArrow} alt="down-arrow" /> */}
-          </Dropdown.Toggle>
+          ></Dropdown.Toggle>
           <Dropdown.Menu>
             <Form.Label className="text-white mb-2">
               Busqueda por ciudad
@@ -44,4 +42,7 @@ const CitySearch = ({ weather }) => {
   );
 };
 
+CitySearch.propTypes = {
+  weather: PropTypes.object,
+};
 export default CitySearch;

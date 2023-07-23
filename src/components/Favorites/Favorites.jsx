@@ -5,7 +5,6 @@ import saved from '../../assets/icons/guardado.svg';
 
 const Favorites = () => {
   const { favorites, setSelectedCity, toggleFavorite } = useContext(AppContext);
-  console.log('favorites: ', favorites);
 
   const handleFavoriteClick = (city) => {
     setSelectedCity(city);
@@ -16,7 +15,7 @@ const Favorites = () => {
       {favorites?.length > 0 && (
         <ListGroup className="my-4">
           {favorites.map((favorite, index) => (
-            <Row className="position-relative my-2">
+            <Row key={index} className="position-relative my-2">
               <Col xs={3}>
                 <p
                   key={index}

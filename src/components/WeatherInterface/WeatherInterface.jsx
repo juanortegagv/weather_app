@@ -13,14 +13,11 @@ export const WeatherInterface = () => {
     weather,
     setWeather,
     selectedCity,
-    favorite,
   } = useContext(AppContext);
-  console.log('favorite: ', favorite);
 
   useEffect(() => {
     const initFetchWeather = async () => {
       if (selectedCity) {
-        console.log('selectedCity: ', selectedCity);
         await fetchAndSetWeather(
           null,
           null,
