@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.4.0",
     "bootstrap": "^5.3.0",
+    "idb": "^7.1.1",
     "node-sass": "^7.0.3",
     "react": "^18.2.0",
     "react-bootstrap": "^2.8.0",
@@ -21,7 +22,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && workbox generateSW workbox-config.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -58,6 +59,7 @@
     "husky": "^8.0.3",
     "lint-staged": "^13.2.3",
     "prettier": "^3.0.0",
-    "prettier-eslint": "^15.0.1"
+    "prettier-eslint": "^15.0.1",
+    "workbox-webpack-plugin": "^7.0.0"
   }
 }

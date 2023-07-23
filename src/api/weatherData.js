@@ -31,6 +31,7 @@ const fetchAndSetWeather = async (
   setError,
   setWeather,
   selectedCity,
+  db,
 ) => {
   setIsLoading(true);
   try {
@@ -44,43 +45,61 @@ const fetchAndSetWeather = async (
       data = await fetchWeather(lat, lon);
     }
     setWeather(data);
+    if (db) {
+      await storeData(data, db);
+    }
   } catch (error) {
-    setError(
-      'Error al obtener los datos del clima. Por favor, vuelve a cargar la página.',
-    );
+    if (!navigator.onLine) {
+      setError('No hay datos disponibles sin conexión a internet.');
+    } else {
+      setError(
+        'Error al obtener los datos del clima. Por favor, vuelve a cargar la página.',
+      );
+    }
     console.error(error);
   } finally {
     setIsLoading(false);
   }
 };
 
-const fetchFavorite = async (
-  city,
-  setIsLoading,
-  setFavorites,
-  setError,
-  favorites,
-) => {
+const fetchFavorite = async (city, setIsLoading, setFavorites, setError) => {
   setIsLoading(true);
   try {
     const weatherData = await getWeatherByCity(city);
-    console.log('weatherData: ', weatherData);
     const { lat, lon } = weatherData.coord;
     const data = await fetchWeather(lat, lon);
-    console.log('data: ', data);
     setFavorites((prevFavorites) => [
       ...prevFavorites,
       { name: city, weather: data.current },
     ]);
-    console.log('favorites: ', favorites);
   } catch (error) {
-    setError(
-      'Error al obtener los datos del clima para la ciudad seleccionada. Por favor, inténtalo de nuevo.',
-    );
+    if (!navigator.onLine) {
+      setError('No hay datos disponibles sin conexión a internet.');
+    } else {
+      setError(
+        'Error al obtener los datos del clima. Por favor, vuelve a cargar la página.',
+      );
+    }
     console.error(error);
   } finally {
     setIsLoading(false);
   }
 };
 
-export { fetchWeather, fetchAndSetWeather, fetchFavorite };
+const storeData = async (data, db) => {
+  const tx = db.transaction('weatherData', 'readwrite');
+  const store = tx.objectStore('weatherData');
+  await store.put(data, 'lastWeatherData');
+};
+
+const fetchStoredData = async (db, setWeather, setError) => {
+  const tx = db.transaction('weatherData', 'readonly');
+  const store = tx.objectStore('weatherData');
+  const data = await store.get('lastWeatherData');
+
+  if (data) {
+    setWeather(data);
+  }
+};
+
+export { fetchWeather, fetchAndSetWeather, fetchFavorite, fetchStoredData };

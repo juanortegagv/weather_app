@@ -1,10 +1,11 @@
 import React, { useContext, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Container, Row, Col, Spinner, Alert } from 'react-bootstrap';
-import { CurrentWeather, CitySearch, Favorites } from '../index';
+import { CurrentWeather, Favorites } from '../index';
 import { AppContext } from '../../context/AppContext';
-import { fetchAndSetWeather } from '../../api/weatherData';
+import { fetchAndSetWeather, fetchStoredData } from '../../api/weatherData';
 
-export const WeatherInterface = () => {
+export const WeatherInterface = ({ db }) => {
   const {
     isLoading,
     setIsLoading,
@@ -17,27 +18,54 @@ export const WeatherInterface = () => {
 
   useEffect(() => {
     const initFetchWeather = async () => {
-      if (selectedCity) {
-        await fetchAndSetWeather(
-          null,
-          null,
-          setIsLoading,
-          setError,
-          setWeather,
-          selectedCity,
-        );
-      } else {
-        const position = await new Promise((resolve, reject) =>
-          navigator.geolocation.getCurrentPosition(resolve, reject),
-        );
-        const lat = position.coords.latitude;
-        const lon = position.coords.longitude;
-        await fetchAndSetWeather(lat, lon, setIsLoading, setError, setWeather);
+      try {
+        let data;
+
+        if (navigator.onLine) {
+          if (selectedCity) {
+            data = await fetchAndSetWeather(
+              null,
+              null,
+              setIsLoading,
+              setError,
+              setWeather,
+              selectedCity,
+              db,
+            );
+          } else {
+            const position = await new Promise((resolve, reject) =>
+              navigator.geolocation.getCurrentPosition(resolve, reject),
+            );
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            await fetchAndSetWeather(
+              lat,
+              lon,
+              setIsLoading,
+              setError,
+              setWeather,
+              null,
+              db,
+            );
+          }
+        } else if (db) {
+          await fetchStoredData(db, setWeather, setError);
+        }
+      } catch (error) {
+        if (!navigator.onLine) {
+          setError('No hay datos disponibles sin conexión a internet.');
+        } else {
+          setError(
+            'Error al obtener los datos del clima. Por favor, vuelve a cargar la página.',
+          );
+        }
+      } finally {
+        setIsLoading(false);
       }
     };
 
     initFetchWeather();
-  }, [selectedCity]);
+  }, [selectedCity, db]);
 
   return (
     <Container
@@ -74,5 +102,7 @@ export const WeatherInterface = () => {
     </Container>
   );
 };
-
+WeatherInterface.propTypes = {
+  db: PropTypes.object,
+};
 export default WeatherInterface;
