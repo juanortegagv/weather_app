@@ -24,7 +24,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build && workbox generateSW workbox-config.js",
     "test": "nyc jest",
-    "generate-coverage-badge": "nyc report --reporter=text-lcov | coveralls && nyc report --reporter=lcov && nyc check-coverage --statements 75",
+    "generate-coverage-badge": "nyc report --reporter=text-lcov > coverage.lcov",
+    "check-coverage": "nyc check-coverage --statements 75",
     "test:watch": "jest --watch",
     "eject": "react-scripts eject"
   },
