@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Container, Row, Col, Spinner, Alert } from 'react-bootstrap';
 import { CurrentWeather, Favorites } from '../index';
 import { AppContext } from '../../context/AppContext';
-import { fetchAndSetWeather, fetchStoredData } from '../../api/weatherData';
+import { initFetchWeather } from '../../api/weatherData';
 
 export const WeatherInterface = ({ db }) => {
   const {
@@ -17,54 +17,7 @@ export const WeatherInterface = ({ db }) => {
   } = useContext(AppContext);
 
   useEffect(() => {
-    const initFetchWeather = async () => {
-      try {
-        let data;
-
-        if (navigator.onLine) {
-          if (selectedCity) {
-            data = await fetchAndSetWeather(
-              null,
-              null,
-              setIsLoading,
-              setError,
-              setWeather,
-              selectedCity,
-              db,
-            );
-          } else {
-            const position = await new Promise((resolve, reject) =>
-              navigator.geolocation.getCurrentPosition(resolve, reject),
-            );
-            const lat = position.coords.latitude;
-            const lon = position.coords.longitude;
-            await fetchAndSetWeather(
-              lat,
-              lon,
-              setIsLoading,
-              setError,
-              setWeather,
-              null,
-              db,
-            );
-          }
-        } else if (db) {
-          await fetchStoredData(db, setWeather, setError);
-        }
-      } catch (error) {
-        if (!navigator.onLine) {
-          setError('No hay datos disponibles sin conexión a internet.');
-        } else {
-          setError(
-            'Error al obtener los datos del clima. Por favor, vuelve a cargar la página.',
-          );
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    initFetchWeather();
+    initFetchWeather(selectedCity, setIsLoading, setError, setWeather, db);
   }, [selectedCity, db]);
 
   return (

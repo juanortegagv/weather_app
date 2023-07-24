@@ -2,7 +2,7 @@ const citiesArray = [
   'Madrid',
   'Barcelona',
   'Valencia',
-  'Seville',
+  'Sevilla',
   'Zaragoza',
   'Málaga',
   'Murcia',

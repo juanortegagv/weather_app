@@ -23,7 +23,7 @@ export const AppProvider = ({ children }) => {
         prevFavorites.filter((favoriteCity) => favoriteCity.name !== city),
       );
     } else {
-      fetchFavorite(city, setIsLoading, setFavorites, setError, favorites);
+      fetchFavorite(city, setIsLoading, setFavorites, setError);
     }
   };
 

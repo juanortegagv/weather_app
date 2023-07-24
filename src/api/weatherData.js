@@ -102,4 +102,63 @@ const fetchStoredData = async (db, setWeather, setError) => {
   }
 };
 
-export { fetchWeather, fetchAndSetWeather, fetchFavorite, fetchStoredData };
+const initFetchWeather = async (
+  selectedCity,
+  setIsLoading,
+  setError,
+  setWeather,
+  db,
+) => {
+  try {
+    let data;
+
+    if (navigator.onLine) {
+      if (selectedCity) {
+        data = await fetchAndSetWeather(
+          null,
+          null,
+          setIsLoading,
+          setError,
+          setWeather,
+          selectedCity,
+          db,
+        );
+      } else {
+        const position = await new Promise((resolve, reject) =>
+          navigator.geolocation.getCurrentPosition(resolve, reject),
+        );
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        await fetchAndSetWeather(
+          lat,
+          lon,
+          setIsLoading,
+          setError,
+          setWeather,
+          null,
+          db,
+        );
+      }
+    } else if (db) {
+      await fetchStoredData(db, setWeather, setError);
+    }
+  } catch (error) {
+    if (!navigator.onLine) {
+      setError('No hay datos disponibles sin conexión a internet.');
+    } else {
+      setError(
+        'Error al obtener los datos del clima. Por favor, vuelve a cargar la página.',
+      );
+    }
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+export {
+  fetchWeather,
+  fetchAndSetWeather,
+  fetchFavorite,
+  fetchStoredData,
+  initFetchWeather,
+};

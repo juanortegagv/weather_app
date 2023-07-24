@@ -13,7 +13,9 @@ const CurrentWeather = ({ weather }) => {
   const cityToAdd = selectedCity
     ? capitalizeWords(selectedCity)
     : weather?.current?.name;
-  const isFavorite = favorites.some((favCity) => favCity.name === cityToAdd);
+  const isFavorite = (favorites || []).some(
+    (favCity) => favCity.name === cityToAdd,
+  );
 
   const handleAddFavorite = () => {
     toggleFavorite(cityToAdd);
