@@ -22,7 +22,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && npx workbox-cli generateSW workbox-config.js",
+    "build": "react-scripts build",
+    "generate-sw": "workbox generateSW workbox-config.js",
     "test": "nyc jest",
     "generate-coverage-badge": "nyc report --reporter=text-lcov > coverage.lcov",
     "check-coverage": "nyc check-coverage --statements 75",
