@@ -1,25 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { WeatherInterface } from './components';
+import { AppProvider } from './context/AppContext';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-function App() {
+function App({ db }) {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppProvider>
+      <Router>
+        <Routes>
+          <Route exact path="/" element={<WeatherInterface db={db} />} />
+        </Routes>
+      </Router>
+    </AppProvider>
   );
 }
-
+App.propTypes = {
+  db: PropTypes.object,
+};
 export default App;

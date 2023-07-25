@@ -1,0 +1,52 @@
+@import "variables";
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #0d2242 !important;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+/*text colors*/
+.text-turquoise {
+  color: $turquoise !important;
+}
+.text-blue-rain {
+  color: $blue-rain !important;
+}
+.text-gray {
+  color: $gray !important;
+}
+/*text colors*/
+
+/*icons*/
+.save-icon {
+  width: 25px;
+  position: absolute;
+  right: 0;
+  cursor: pointer;
+}
+.saved-icon-favorites {
+  height: 25px;
+  cursor: pointer;
+}
+/*icons*/
+
+/*letters*/
+.favorites-paragraph {
+  cursor: pointer;
+  width: fit-content;
+}
+.favorites-title {
+  width: fit-content;
+  text-decoration: underline;
+}
+/*letters*/
