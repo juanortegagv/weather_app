@@ -16,7 +16,7 @@ export const getWeatherByLocation = async (lat, lon) => {
 export const getWeatherByCity = async (city) => {
   try {
     let response = await axios.get(
-      `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`,
+      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`,
     );
     return response.data;
   } catch (error) {
