@@ -4,6 +4,9 @@
 
 Esta es una aplicación moderna del clima que utiliza la API proporcionada por [OpenWeatherMap](https://openweathermap.org/) para recopilar datos meteorológicos, construida con la popular biblioteca de JavaScript - React,. La aplicación aprovecha el poder de los service workers para la funcionalidad offline y mejoras de rendimiento. Los service workers actúan como un proxy entre el navegador y la red, permitiendo que la aplicación funcione offline y cargue más rápido en visitas posteriores.
 
+## NOTA IMPORTANTE
+Es necesario **permitir que el navegador obtenga tu ubicacíon**
+
 ## Generar el sw.js
 Para cargar el workbox del Service Worker en local es necesario usar el comando **npm run build && npm run generate-sw** para generar las build necesarias.
 
