@@ -22,7 +22,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && workbox generateSW workbox-config.js",
+    "build": "react-scripts build && npx workbox-cli generateSW workbox-config.js",
     "test": "nyc jest",
     "generate-coverage-badge": "nyc report --reporter=text-lcov > coverage.lcov",
     "check-coverage": "nyc check-coverage --statements 75",
@@ -96,6 +96,7 @@
     "nyc": "^15.1.0",
     "prettier": "^3.0.0",
     "prettier-eslint": "^15.0.1",
+    "workbox-cli": "^7.0.0",
     "workbox-webpack-plugin": "^7.0.0"
   }
 }
