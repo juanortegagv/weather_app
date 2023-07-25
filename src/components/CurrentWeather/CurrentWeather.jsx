@@ -55,7 +55,7 @@ const CurrentWeather = ({ weather }) => {
             className="d-flex justify-content-center p-0 position-relative"
           >
             <img
-              src={`http://openweathermap.org/img/wn/${weather.current.weather[0].icon}@2x.png`}
+              src={`https://openweathermap.org/img/wn/${weather.current.weather[0].icon}@2x.png`}
               alt={weather.current.weather[0].description}
               style={{ width: '125px' }}
             />
@@ -80,7 +80,7 @@ const CurrentWeather = ({ weather }) => {
                       className="p-0 align-items-center d-flex flex-column"
                     >
                       <img
-                        src={`http://openweathermap.org/img/wn/${fweather.weather[0].icon}@2x.png`}
+                        src={`https://openweathermap.org/img/wn/${fweather.weather[0].icon}@2x.png`}
                         alt={fweather.weather[0].description}
                       />
                       <p className="h6 text-white">
